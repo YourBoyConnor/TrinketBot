@@ -7,6 +7,7 @@ client.slashCommands = new Collection();
 client.on('ready', async () => {
  var memberCount = client.guilds.cache.reduce((x, y) => x + y.memberCount, 0);
  console.log(`TrinketBot has started, with ${memberCount} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds.`);
+ client.user.setActivity("with Trinkets", { type: "PLAYING" });
 })
 
 const readSlashCommands = () => {
