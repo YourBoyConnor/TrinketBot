@@ -40,7 +40,7 @@ module.exports = {
 
     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.Speak)) return interaction.reply("I am not allowed to speak in VC!");
 
-    const resource = createAudioResource(join(__dirname, './Audio/finger.mp3'));
+    const resource = createAudioResource(join(__dirname, 'Audio/finger.mp3'));
 
     player.on(AudioPlayerStatus.Playing, () => {
       console.log('The Audio Player is now playing')
