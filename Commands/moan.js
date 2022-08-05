@@ -5,7 +5,7 @@ const { join } = require('node:path');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('sus')
+    .setName('moan')
     .setDescription(':flushed:')
     .addUserOption(option =>
 		    option.setName('user')
@@ -70,6 +70,6 @@ module.exports = {
     	connection.destroy();
     });
 
-    return;
+    return interaction.reply(':flushed:');
   },
 };
