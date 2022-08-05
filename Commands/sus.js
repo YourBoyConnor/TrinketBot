@@ -5,8 +5,8 @@ const { join } = require('node:path');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('finger')
-    .setDescription('Walter, put your dick away, Walter. I\'m not having sex with you right now, Walter.')
+    .setName('sus')
+    .setDescription('I\'m feeling like imposter...')
     .addUserOption(option =>
 		    option.setName('user')
 			     .setDescription('The bot will join this user\'s channel to play. If this is blank, it defaults to your channel.')
@@ -40,7 +40,17 @@ module.exports = {
 
     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.Speak)) return interaction.reply("I am not allowed to speak in VC!");
 
-    const resource = createAudioResource(join(__dirname, './Audio/finger.mp3'));
+    const resources = [];
+
+    const fs = require('fs');
+    const commandFiles = fs.readdirSync('./Commands/Audio/Sus').filter(file => file.endsWith('.mp3'));
+
+    for (const file of commandFiles) {
+      let path = `Audio/Sus/${file}`;
+      resources.push(createAudioResource(join(__dirname, path)));
+    }
+
+    const resource = resources[Math.floor(Math.random() * resources.length)];
 
     player.on(AudioPlayerStatus.Playing, () => {
       console.log('The Audio Player is now playing')
@@ -72,9 +82,9 @@ module.exports = {
     });
 
     if (isMention) {
-      return interaction.reply(`**<@${memberOption.id}>, put your dick away, <@${memberOption.id}>. I\'m not having sex with you right now, <@${memberOption.id}>.**`)
+      return interaction.reply(`**<@${memberOption.id}> is feeling like imposter...**`)
     } else {
-      return interaction.reply(`**Walter, put your dick away, Walter. I'm not having sex with you right now, Walter.**`)
+      return interaction.reply(`**I\'m feeling like imposter...**`)
     }
   },
 };

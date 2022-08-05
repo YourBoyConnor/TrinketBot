@@ -22,9 +22,10 @@ module.exports = {
     }
 
     const player = createAudioPlayer();
-    let voiceChannel = memberOption.voice.channel;
+    let voiceChannel;
 
     if (isMention) {
+      voiceChannel = memberOption.voice.channel;
       if (!voiceChannel) {
         return interaction.reply("They need to be in a VC to use this command!");
       }
