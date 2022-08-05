@@ -9,9 +9,9 @@ const deploySlashCommands = async () => {
    const applicationId = '1003138443506884708'
 
    const fs = require('fs');
-   const testFolder = 'Commands';
+   const dir = 'Commands';
 
-   fs.readdir(testFolder, (err, files) => {
+   fs.readdir(dir, (err, files) => {
      files.forEach(file => {
        if (!file.toString().endsWith('.js')) return;
 

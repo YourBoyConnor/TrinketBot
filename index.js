@@ -11,9 +11,20 @@ client.on('ready', async () => {
 })
 
 const readSlashCommands = () => {
-  let command = require(`./trinkets`);
-  console.log("Successfully loaded " + command.data.name)
-  client.slashCommands.set(command.data.name, command);
+  const fs = require('fs');
+  const dir = 'Commands';
+
+  fs.readdir(dir, (err, files) => {
+    files.forEach(file => {
+      if (!file.toString().endsWith('.js')) return;
+
+      let fileName = file.toString().substring(0, file.toString().length - 3);
+      let filePath = './Commands/' + fileName;
+      let command = require(filePath);
+      console.log("Successfully loaded " + command.data.name)
+      client.slashCommands.set(command.data.name, command);
+    });
+  });
 }
 
 readSlashCommands();
