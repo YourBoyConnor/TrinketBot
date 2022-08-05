@@ -1,0 +1,26 @@
+{
+   "name": "trinketbot",
+   "version": "1.0.0",
+   "description": "Trinkets. I love giving Trinkets to friends and family! Trinkets",
+   "main": "index.js",
+   "scripts": {
+      "start": "node index.js",
+      "wsl": ".env && nodemon index.js",
+      "linux": "source ./.env && nodemon index.js"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "dependencies": {
+      "@discordjs/builders": "^1.1.0",
+      "@discordjs/rest": "^1.0.1",
+      "@discordjs/voice": "^0.11.0",
+      "discord-api-types": "^0.37.1",
+      "discord.js": "^14.1.2",
+      "dotenv": "^16.0.1",
+      "ffmpeg": "^0.0.4",
+      "ffmpeg-static": "^5.0.2",
+      "libsodium-wrappers": "^0.7.10",
+      "nodemon": "^2.0.19"
+   }
+}
