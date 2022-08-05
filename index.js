@@ -1,7 +1,9 @@
 require("dotenv").config();
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences] });
 const mySecret = process.env['BOT_TOKEN'];
+const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } = require('@discordjs/voice');
+const { join } = require('node:path');
 
 client.slashCommands = new Collection();
 client.on('ready', async () => {
@@ -36,6 +38,58 @@ if (!command)
   } catch (error) {
       console.error(error);
       return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+  }
+})
+
+client.on('voiceStateUpdate', async (oldVoiceState, newVoiceState) => {
+  const player = createAudioPlayer();
+  const voiceChannel = newVoiceState.channelId;
+  const botConnection = newVoiceState.member.user.bot;
+  let memberStatus = "EMPTY";
+  if (newVoiceState.member.presence.activities.length != 0) {
+    memberStatus = newVoiceState.member.presence.activities[0].state;
+  }
+  const triggerString = 'woke up chris breezy';
+
+  if (botConnection || memberStatus.toUpperCase() != triggerString.toUpperCase()) return;
+
+  try {
+    const resources = [];
+
+    const fs = require('fs');
+    const commandFiles = fs.readdirSync('./Commands/Audio/Producers').filter(file => file.endsWith('.mp3'));
+
+    for (const file of commandFiles) {
+      let path = `Commands/Audio/Producers/${file}`;
+      resources.push(createAudioResource(join(__dirname, path)));
+    }
+
+    const resource = resources[Math.floor(Math.random() * resources.length)];
+
+    player.on(AudioPlayerStatus.Playing, () => {
+      console.log('The Audio Player is now playing')
+    });
+
+    player.on('error', err => {
+      console.log('Error: ${error.message}');
+    });
+
+
+    let connection = joinVoiceChannel({
+       channelId: voiceChannel,
+       guildId: newVoiceState.guild.id,
+       adapterCreator: newVoiceState.guild.voiceAdapterCreator,
+    });
+
+    const subscription = connection.subscribe(player);
+    player.play(resource);
+
+    player.on(AudioPlayerStatus.Idle, () => {
+    	connection.destroy();
+    });
+
+  } catch (error) {
+      console.error(error);
   }
 })
 
