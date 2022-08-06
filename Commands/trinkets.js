@@ -72,7 +72,7 @@ module.exports = {
     });
 
     if (isMention) {
-      return interaction.reply(`Trinkets. I love giving Trinkets to <@${memberOption.id}> and family! Trinkets**`)
+      return interaction.reply(`**Trinkets. I love giving Trinkets to <@${memberOption.id}> and family! Trinkets**`)
     } else {
       return interaction.reply(`**Trinkets. I love giving Trinkets to friends and family! Trinkets**`)
     }
