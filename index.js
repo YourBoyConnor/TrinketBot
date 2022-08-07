@@ -51,7 +51,7 @@ client.on('voiceStateUpdate', async (oldVoiceState, newVoiceState) => {
   }
   const triggerString = 'woke up chris breezy';
 
-  if (botConnection || memberStatus.toUpperCase() != triggerString.toUpperCase()) return;
+  if (newVoiceState.deaf || botConnection || memberStatus.toUpperCase() != triggerString.toUpperCase()) return;
 
   try {
     const resources = [];
