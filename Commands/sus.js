@@ -10,9 +10,34 @@ module.exports = {
     .addUserOption(option =>
 		    option.setName('user')
 			     .setDescription('The bot will join this user\'s channel to play. If this is blank, it defaults to your channel.')
-			     .setRequired(false)),
+			     .setRequired(false))
+    .addStringOption(option =>
+        option.setName('specific_sound')
+           .setDescription('The sound you want to play. Enter \"sounds\" to list sounds. If blank, play a random one.')
+           .setRequired(false)),
 
   async execute (client, interaction) {
+
+    const soundOption = interaction.options.getString('specific_sound');
+    let isSpecific = false;
+
+    if (soundOption != undefined) {
+      isSpecific = true;
+    }
+
+    if (soundOption === 'sounds') {
+      let sounds = [];
+      const fs = require('fs');
+      const commandFiles = fs.readdirSync('./Commands/Audio/Sus').filter(file => file.endsWith('.mp3'));
+
+      for (const file of commandFiles) {
+        sounds.push(file.substring(0, file.length - 4));
+      }
+
+      let soundString = '**Available Sounds:**\n' + sounds.toString().replaceAll(',', '\n');
+
+      return interaction.reply(soundString);
+    }
 
     const memberOption = interaction.options.getMember('user');
     let isMention = false;
@@ -42,12 +67,17 @@ module.exports = {
 
     const resources = [];
 
-    const fs = require('fs');
-    const commandFiles = fs.readdirSync('./Commands/Audio/Sus').filter(file => file.endsWith('.mp3'));
-
-    for (const file of commandFiles) {
-      let path = `Audio/Sus/${file}`;
+    if (isSpecific) {
+      let path = `Audio/Sus/${soundOption}.mp3`;
       resources.push(createAudioResource(join(__dirname, path)));
+    } else {
+      const fs = require('fs');
+      const commandFiles = fs.readdirSync('./Commands/Audio/Sus').filter(file => file.endsWith('.mp3'));
+
+      for (const file of commandFiles) {
+        let path = `Audio/Sus/${file}`;
+        resources.push(createAudioResource(join(__dirname, path)));
+      }
     }
 
     const resource = resources[Math.floor(Math.random() * resources.length)];
