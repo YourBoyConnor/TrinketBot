@@ -49,9 +49,31 @@ client.on('voiceStateUpdate', async (oldVoiceState, newVoiceState) => {
   if (newVoiceState.member.presence.activities.length != 0) {
     memberStatus = newVoiceState.member.presence.activities[0].state;
   }
-  const triggerString = 'woke up chris breezy';
 
-  if (newVoiceState.deaf || botConnection || memberStatus.toUpperCase() != triggerString.toUpperCase()) return;
+  const fs = require('fs');
+  const commandFiles = fs.readdirSync('./Commands/Audio/Producers').filter(file => file.endsWith('.mp3'));
+
+  let triggerString = 'random';
+
+  let memberStatusMatch = false;
+
+  if (memberStatus == null) {
+    memberStatusMatch = false;
+  }
+  else if (memberStatus.toUpperCase() === 'RANDOM') {
+    memberStatusMatch = true;
+  } else {
+    for (const file of commandFiles) {
+      let fileString = file.substring(0, file.length - 4);
+      if (memberStatus.toUpperCase() == fileString.toUpperCase()) {
+        memberStatusMatch = true;
+        triggerString = fileString;
+        break;
+      }
+    }
+  }
+
+  if (newVoiceState.deaf || botConnection || !memberStatusMatch) return;
 
   try {
     const resources = [];
@@ -64,7 +86,14 @@ client.on('voiceStateUpdate', async (oldVoiceState, newVoiceState) => {
       resources.push(createAudioResource(join(__dirname, path)));
     }
 
-    const resource = resources[Math.floor(Math.random() * resources.length)];
+    let resource = null;
+
+    if (triggerString !== 'random') {
+      let path = `Commands/Audio/Producers/${triggerString}.mp3`;
+      resource = createAudioResource(join(__dirname, path));
+    } else {
+      resource = resources[Math.floor(Math.random() * resources.length)];
+    }
 
     player.on(AudioPlayerStatus.Playing, () => {
       console.log('The Audio Player is now playing')
