@@ -4,7 +4,7 @@
    "description": "Trinkets. I love giving Trinkets to friends and family! Trinkets",
    "main": "index.js",
    "scripts": {
-      "start": "node index.js",
+      "start": "nodemon index.js",
       "wsl": ".env && nodemon index.js",
       "linux": "source ./.env && nodemon index.js"
    },
@@ -21,8 +21,11 @@
       "ffmpeg": "^0.0.4",
       "ffmpeg-static": "^5.0.2",
       "libsodium-wrappers": "^0.7.10",
-      "nodemon": "^2.0.19",
+      "nodemon": "^2.0.20",
+      "play-dl": "^1.9.6",
+      "youtube-api-v3-search": "^1.2.1",
       "youtube-search": "^1.1.6",
-      "ytdl-core": "^4.11.2"
+      "ytdl-core": "^4.11.2",
+      "ytsr": "^3.8.0"
    }
 }
