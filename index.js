@@ -4,7 +4,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 const mySecret = process.env['BOT_TOKEN'];
 const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } = require('@discordjs/voice');
 const { join } = require('node:path');
-const { keep_alive } = require("./keep_alive");
 
 client.slashCommands = new Collection();
 client.on('ready', async () => {
